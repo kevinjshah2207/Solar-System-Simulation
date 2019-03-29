@@ -1048,6 +1048,23 @@ void mouse(int btn ,int state,int x,int y)
 	}
 }
 
+void idle()
+{
+	z=(z+50)%360;
+	b=(b+10)%360;
+	c=(c+1)%360;
+	m=(m+3)%360;M=(M+12)%360;
+	v=(v+2)%360;V=(V+10)%360;
+	e=(e+5)%360;E=(E+8)%360;
+	r=(r+6)%360;R=(R+6)%360;
+	j=(j+10)%360;J=(J+4)%360;
+	s=(s+9)%360;S=(S+3)%360;
+	u=(u+8)%360;U=(U+2)%360;
+	n=(n+7)%360;N=(N+1)%360;
+
+	glutPostRedisplay();
+}
+
 int main(int argc,char **argv)
 {
 	glutInit(&argc,argv);
@@ -1055,12 +1072,17 @@ int main(int argc,char **argv)
 	glutInitWindowSize(500,500);
 	glutInitWindowPosition(100,100);
 	glutCreateWindow("planets amidst stars");
+
 	myinit();
+
 	glutDisplayFunc(display);
+//	glutIdleFunc(idle);
 	glutReshapeFunc(reshape);
 	glutKeyboardFunc(keyboard);
 	glutMouseFunc(mouse);
+
 	glEnable(GL_DEPTH_TEST);
 	glutMainLoop();
+
 	return 0;
 }
