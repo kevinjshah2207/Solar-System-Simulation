@@ -1,0 +1,13 @@
+[gd_scene load_steps=3 format=2]
+
+[sub_resource type="SpatialMaterial" id=1]
+albedo_color = Color( 0.870588, 0.866667, 0.866667, 1 )
+
+[sub_resource type="SphereMesh" id=2]
+material = SubResource( 1 )
+radius = 0.5
+height = 1.053
+
+[node name="Moon" type="CSGMesh"]
+mesh = SubResource( 2 )
+
