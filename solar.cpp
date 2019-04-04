@@ -1,7 +1,12 @@
 #include<stdio.h>
 #include<stdlib.h>
-#include<GLUT/glut.h>
 #include<math.h>
+
+#ifdef __APPLE__
+#include <GLUT/glut.h>
+#else
+#include <GL/glut.h>
+#endif
 
 static int m=0,M=0,v=0,V=0,E=0,e=0,r=0,R=0,j=0,J=0,s=0,S=0,U=0,u=0,n=0,N=0,X=0,z=0,B=0,b=0,c=0;
 
