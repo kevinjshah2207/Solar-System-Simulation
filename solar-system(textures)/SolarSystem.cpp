@@ -8,8 +8,10 @@
 #if defined(_WIN32)
 	#include "glut.h"
 	#include <windows.h>
-#else
+#elif __APPLE__
 	#include <GLUT/glut.h>
+#else
+	#include <GL/glut.h>
 #endif
 
 #include <math.h>
