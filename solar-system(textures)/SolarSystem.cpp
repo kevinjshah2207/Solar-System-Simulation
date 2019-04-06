@@ -233,9 +233,13 @@ void NonASCIIKeyboardPress(int pressedKey, int mouseXPosition, int mouseYPositio
 	switch(pressedKey)
 	{
 	case GLUT_KEY_RIGHT: { 
-		viewerAzimuth += VIEWER_ANGLE_INCREMENT; 
-		if (viewerAzimuth > 2*PI) 
-			viewerAzimuth -= 2*PI; 
+		if(clipFlag) {
+			eqn[0] += 0.1;
+		} else {
+			viewerAzimuth += VIEWER_ANGLE_INCREMENT; 
+			if (viewerAzimuth > 2*PI) 
+				viewerAzimuth -= 2*PI; 
+		}
 		break; 
 	}
 	case GLUT_KEY_LEFT:  { 
