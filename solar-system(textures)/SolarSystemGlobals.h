@@ -113,6 +113,10 @@ const GLfloat EARTH_INCLINATION   = 7;
 //Particle System Constants
 const char PARTICLE_BMP_FILENAME[] = "Bitmaps/Particle.bmp";
 
+// gluPerspective defaults
+const GLfloat FOV = 60.0;
+const GLfloat Z_NEAR = 0.1;
+const GLfloat Z_FAR = 100.0;
 
 #define SOLAR_SYSTEM_H
 #endif
