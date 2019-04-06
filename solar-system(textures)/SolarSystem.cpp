@@ -6,8 +6,7 @@
 
 //If we're in the windows environment load the appropriate libraries
 #if defined(_WIN32)
-#include "glut.h"
-#include <windows.h>
+#include <GL/glut.h>
 #elif __APPLE__
 #include <GLUT/glut.h>
 #else

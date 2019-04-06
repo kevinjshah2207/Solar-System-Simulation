@@ -1,7 +1,7 @@
 #ifndef _RGBPIXMAP
 	#define _RGBPIXMAP
 #if defined(_WIN32)
-#include <glut.h>
+#include <GL/glut.h>
 #elif __APPLE__
 #include <GLUT/glut.h>
 #else
@@ -121,7 +121,7 @@ public:
 		// draw this pixmap at current raster position
 		if(nRows == 0 || nCols == 0) return;
 
-		//tell OpenGL: don’t align pixels to 4 byte boundaries in memory
+		//tell OpenGL: donï¿½t align pixels to 4 byte boundaries in memory
 		glPixelStorei(GL_UNPACK_ALIGNMENT,1);
 		glDrawPixels(nCols, nRows,GL_RGBA, GL_UNSIGNED_BYTE,pixel);
 	}
@@ -135,7 +135,7 @@ public:
 		pixel = new mRGB[nRows *nCols];
 		if(!pixel) return -1;
 
-		//tell OpenGL: don’t align pixels to 4 byte boundaries in memory
+		//tell OpenGL: donï¿½t align pixels to 4 byte boundaries in memory
 		glPixelStorei(GL_PACK_ALIGNMENT,1);
 		glReadPixels(x, y, nCols, nRows, GL_RGBA,GL_UNSIGNED_BYTE,pixel);
 		return 0;
@@ -150,7 +150,7 @@ public:
 		pixel = new mRGB[nRows *nCols]; 
 		if(!pixel) return -1;
 
-		//tell OpenGL: don’t align pixels to 4 byte boundaries in memory
+		//tell OpenGL: donï¿½t align pixels to 4 byte boundaries in memory
 		glPixelStorei(GL_PACK_ALIGNMENT,1);
 		glReadPixels(r.left,r.bott, nCols, nRows, GL_RGBA, GL_UNSIGNED_BYTE, pixel);
 		return 0;
