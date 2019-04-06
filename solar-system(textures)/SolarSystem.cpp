@@ -61,6 +61,10 @@ ParticleSystem particles;
 bool particleFlag = true;
 bool blendFlag = true;
 bool clipFlag = false;
+bool animateFlag = true;
+
+// GLOBAL planet angles
+GLfloat earthAngle;
 
 // GLOBAL window numbers
 GLuint MainWindowNum;
@@ -200,10 +204,29 @@ void KeyboardPress(unsigned char pressedKey, int mouseXPosition, int mouseYPosit
 		break;
 	}
 
+	case '3': {
+		offsetX = EARTH_RADIUS * cos(earthAngle);
+		offsetY = EARTH_RADIUS * sin(earthAngle);
+
+		break;
+	}
+
 	case 'c': {
 		fov = 60.0;
 		zNear = 5.0;
 		zFar = 15.0;
+		break;
+	}
+
+	case 'a': {
+		animateFlag = !animateFlag;
+		break;
+	}
+
+	case 'o': {
+		offsetX = LOOK_AT_POSITION[0];
+		offsetY = LOOK_AT_POSITION[1];
+		offsetZ = LOOK_AT_POSITION[2];
 		break;
 	}
 
@@ -267,10 +290,12 @@ void NonASCIIKeyboardPress(int pressedKey, int mouseXPosition, int mouseYPositio
 // Earth day being added to the scene in one screen update. //
 void TimerFunction(int value)
 {
-	CurrentEarthRotation += EarthDayIncrement;
-	EarthDaysTranspired += EarthDayIncrement;
-	if (EarthDaysTranspired == EARTH_ORBIT_DUR)
-		EarthDaysTranspired = 0;
+	if(animateFlag) {
+		CurrentEarthRotation += EarthDayIncrement;
+		EarthDaysTranspired += EarthDayIncrement;
+		if (EarthDaysTranspired == EARTH_ORBIT_DUR)
+			EarthDaysTranspired = 0;
+	}
 	glutPostRedisplay();
 	glutTimerFunc(20, TimerFunction, 1);
 }
@@ -455,6 +480,7 @@ void drawEarthAndMoon()
 	glRotatef(EARTH_INCLINATION, 0.0, 0.0, 1.0);
 	glRotatef( 360.0 * (EarthDaysTranspired/EARTH_ORBIT_DUR), 0.0, 1.0, 0.0);
 	glTranslatef(EARTH_ORBIT_RADIUS, 0.0, 0.0 );
+	earthAngle = CurrentEarthRotation;
 	glRotatef( 360.0 * CurrentEarthRotation, 0.0, 1.0, 0.0 );
 	glRotatef( -90.0, 1.0, 0.0, 0.0 );
 	glBindTexture(GL_TEXTURE_2D, EarthTextureName);
@@ -595,9 +621,10 @@ void drawParticle(Particle currParticle)
 void mouse(int button, int state, int x, int y) {
 	int width, height;
 	if ( state == GLUT_DOWN) {
-		offsetX = x;
-		offsetY = y;
+		
+		offsetX = EARTH_RADIUS * cos(earthAngle);
+		offsetY = EARTH_RADIUS * sin(earthAngle);
 	}
-	printf("%d %d ", x, y);
+	printf("%f %f %f \n", offsetX, offsetY, offsetZ);
 }
 
