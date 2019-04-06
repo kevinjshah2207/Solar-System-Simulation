@@ -72,6 +72,10 @@ GLfloat zFar = Z_FAR;
 // GLOBAL clip plane eqn
 double eqn[] = { 0, 0, 0, 0};
 
+// GLOBAL lookAt parameters
+GLfloat offsetX = LOOK_AT_POSITION[0];
+GLfloat offsetY = LOOK_AT_POSITION[1];
+GLfloat offsetZ = LOOK_AT_POSITION[2];
 
 /***********************/
 /* Function prototypes */
@@ -125,6 +129,7 @@ int main(int argc, char** argv)
 	glutDisplayFunc( Display );
 	glutTimerFunc( 20, TimerFunction, 1 );
 	glViewport(0, 0, currWindowSize[0], currWindowSize[1]);
+	gluOrtho2D( -1.0, 1.0, -1.0, 1.0);
 
 	// Set up standard lighting, shading, and depth testing.
 	glShadeModel(GL_SMOOTH);
@@ -137,6 +142,7 @@ int main(int argc, char** argv)
 	glClearColor(0.0, 0.0, 0.0, 0.0);
 	glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
 	SetLights();
+
 
 	// Set up all texture maps and texture-mapped objects.
 	MakeAllImages();
@@ -281,10 +287,10 @@ void Display()
 	glLoadIdentity();
 
 	// Position and orient viewer.
-	gluLookAt(LOOK_AT_POSITION[0] + ViewerDistance * sin(viewerZenith) * sin(viewerAzimuth), 
-		  LOOK_AT_POSITION[1] + ViewerDistance * cos(viewerZenith), 
-		  LOOK_AT_POSITION[2] + ViewerDistance * sin(viewerZenith) * cos(viewerAzimuth),
-		  LOOK_AT_POSITION[0], LOOK_AT_POSITION[1], LOOK_AT_POSITION[2],
+	gluLookAt(offsetX + ViewerDistance * sin(viewerZenith) * sin(viewerAzimuth), 
+		  offsetY + ViewerDistance * cos(viewerZenith), 
+		  offsetZ + ViewerDistance * sin(viewerZenith) * cos(viewerAzimuth),
+		  offsetX, offsetY, offsetZ,
 		  0.0, 1.0, 0.020);
 
 	// Render scene.
@@ -580,13 +586,12 @@ void drawParticle(Particle currParticle)
 	glDisable(GL_TEXTURE_2D);
 }
 
-void clipWindow() {
-}
-
 void mouse(int button, int state, int x, int y) {
 	int width, height;
 	if ( state == GLUT_DOWN) {
-
+		offsetX = x;
+		offsetY = y;
 	}
+	printf("%d %d ", x, y);
 }
 
