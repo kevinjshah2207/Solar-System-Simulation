@@ -56,7 +56,7 @@ bool clipFlag = false;
 bool animateFlag = true;
 
 // GLOBAL planet angles
-GLfloat earthAngle;
+GLfloat angle;
 
 // GLOBAL window numbers
 GLuint MainWindowNum;
@@ -102,6 +102,7 @@ void drawAllParticles();
 
 void clipWindow();
 void mouse(int button, int state, int x, int y);
+float toRadian( float angleInDegree);
 
 /****************************/
 /* Function implementations */
@@ -155,10 +156,89 @@ void KeyboardPress(unsigned char pressedKey, int mouseXPosition, int mouseYPosit
 {
 	char pressedChar = char(pressedKey);
 	switch(pressedKey) {
+	case '0': {
+		offsetX = offsetY = offsetZ = 0;
+		break;
+	}
+
+	case '1': {
+		angle = toRadian( 360.0 * (EarthDaysTranspired/MERCURY_ORBIT_DUR));
+		offsetX = MERCURY_ORBIT_RADIUS * cos(angle);
+		offsetZ = -MERCURY_ORBIT_RADIUS * sin(angle);
+
+		break;
+	}
+
+	case '2': {
+		angle = toRadian( 360.0 * (EarthDaysTranspired/VENUS_ORBIT_DUR));
+		offsetX = VENUS_ORBIT_RADIUS * cos(angle);
+		offsetZ = -VENUS_ORBIT_RADIUS * sin(angle);
+
+		break;
+	}
+
+	case '3': {
+		angle = toRadian( 360.0 * (EarthDaysTranspired/EARTH_ORBIT_DUR));
+		offsetX = EARTH_ORBIT_RADIUS * cos(angle);
+		offsetZ = -EARTH_ORBIT_RADIUS * sin(angle);
+
+		break;
+	}
+
+	case '4': {
+		angle = toRadian( 360.0 * (EarthDaysTranspired/MARS_ORBIT_DUR));
+		offsetX = MARS_ORBIT_RADIUS * cos(angle);
+		offsetZ = -MARS_ORBIT_RADIUS * sin(angle);
+
+		break;
+	}
+
+	case '5': {
+		angle = toRadian( 360.0 * (EarthDaysTranspired/JUPITER_ORBIT_DUR));
+		offsetX = JUPITER_ORBIT_RADIUS * cos(angle);
+		offsetZ = -JUPITER_ORBIT_RADIUS * sin(angle);
+
+		break;
+	}
+
+	case '6': {
+		angle = toRadian( 360.0 * (EarthDaysTranspired/SATURN_ORBIT_DUR));
+		offsetX = SATURN_ORBIT_RADIUS * cos(angle);
+		offsetZ = -SATURN_ORBIT_RADIUS * sin(angle);
+
+		break;
+	}
+
+	case '7': {
+		angle = toRadian( 360.0 * (EarthDaysTranspired/URANUS_ORBIT_DUR));
+		offsetX = URANUS_ORBIT_RADIUS * cos(angle);
+		offsetZ = -URANUS_ORBIT_RADIUS * sin(angle);
+
+		break;
+	}
+
+	case '8': {
+		angle = toRadian( 360.0 * (EarthDaysTranspired/NEPTUNE_ORBIT_DUR));
+		offsetX = NEPTUNE_ORBIT_RADIUS * cos(angle);
+		offsetZ = -NEPTUNE_ORBIT_RADIUS * sin(angle);
+
+		break;
+	}
+
+	case '9': {
+		angle = toRadian( 360.0 * (EarthDaysTranspired/PLUTO_ORBIT_DUR));
+		offsetX = PLUTO_ORBIT_RADIUS * cos(angle);
+		offsetZ = -PLUTO_ORBIT_RADIUS * sin(angle);
+
+		break;
+	}
+
 	case 'd': {
-		fov = FOV;
-		zNear = Z_NEAR;
-		zFar = Z_FAR;
+		if(clipFlag) {
+			eqn[3] += 0.1;
+		} else {
+		}
+		break;
 	}
 
 	case '+': {
@@ -192,26 +272,63 @@ void KeyboardPress(unsigned char pressedKey, int mouseXPosition, int mouseYPosit
 	}
 		//enable and disable the blending function
 	case 'b': {
-		blendFlag = !blendFlag;
-		break;
-	}
-
-	case '3': {
-		offsetX = EARTH_RADIUS * cos(earthAngle);
-		offsetY = EARTH_RADIUS * sin(earthAngle);
-
+		if(clipFlag) {
+			eqn[1] += 0.1;
+		} else {
+			blendFlag = !blendFlag;
+		}
 		break;
 	}
 
 	case 'c': {
-		fov = 60.0;
-		zNear = 5.0;
-		zFar = 15.0;
+		if(clipFlag) {
+			eqn[2] += 0.1;
+		} else {
+			fov = 60.0;
+			zNear = 5.0;
+			zFar = 15.0;
+		}
 		break;
 	}
 
 	case 'a': {
-		animateFlag = !animateFlag;
+		if(clipFlag) {
+			eqn[0] += 0.1;
+		} else {
+			animateFlag = !animateFlag;
+		}
+		break;
+	}
+	
+	case 'A': {
+		if(clipFlag) {
+			eqn[0] -= 0.1;
+		} else {
+		}
+		break;
+	}
+
+	case 'B': {
+		if(clipFlag) {
+			eqn[1] -= 0.1;
+		} else {
+		}
+		break;
+	}
+
+	case 'C': {
+		if(clipFlag) {
+			eqn[2] -= 0.1;
+		} else {
+		}
+		break;
+	}
+
+	case 'D': {
+		if(clipFlag) {
+			eqn[3] -= 0.1;
+		} else {
+		}
 		break;
 	}
 
@@ -219,15 +336,19 @@ void KeyboardPress(unsigned char pressedKey, int mouseXPosition, int mouseYPosit
 		offsetX = LOOK_AT_POSITION[0];
 		offsetY = LOOK_AT_POSITION[1];
 		offsetZ = LOOK_AT_POSITION[2];
+
+		fov = FOV;
+		zNear = Z_NEAR;
+		zFar = Z_FAR;
 		break;
 	}
 
 	case 'P': {
 		clipFlag = !clipFlag;
 		if(clipFlag) {
-			eqn[0] = 1;
-			eqn[1] = 1;
-			eqn[2] = 1;
+			eqn[0] = 0;
+			eqn[1] = 0;
+			eqn[2] = 0;
 			eqn[3] = 0;
 		} else {
 			eqn[0] = 0;
@@ -248,13 +369,9 @@ void NonASCIIKeyboardPress(int pressedKey, int mouseXPosition, int mouseYPositio
 	switch(pressedKey)
 	{
 	case GLUT_KEY_RIGHT: { 
-		if(clipFlag) {
-			eqn[0] += 0.1;
-		} else {
-			viewerAzimuth += VIEWER_ANGLE_INCREMENT; 
-			if (viewerAzimuth > 2*PI) 
-				viewerAzimuth -= 2*PI; 
-		}
+		viewerAzimuth += VIEWER_ANGLE_INCREMENT; 
+		if (viewerAzimuth > 2*PI) 
+			viewerAzimuth -= 2*PI; 
 		break; 
 	}
 	case GLUT_KEY_LEFT:  { 
@@ -467,24 +584,23 @@ void drawEarthAndMoon()
 	gluQuadricTexture(quadro, GL_TRUE);			
 	glEnable(GL_TEXTURE_2D);
 	glPushMatrix();
-	glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
-	glPushMatrix();
-	glRotatef(EARTH_INCLINATION, 0.0, 0.0, 1.0);
-	glRotatef( 360.0 * (EarthDaysTranspired/EARTH_ORBIT_DUR), 0.0, 1.0, 0.0);
-	glTranslatef(EARTH_ORBIT_RADIUS, 0.0, 0.0 );
-	earthAngle = CurrentEarthRotation;
-	glRotatef( 360.0 * CurrentEarthRotation, 0.0, 1.0, 0.0 );
-	glRotatef( -90.0, 1.0, 0.0, 0.0 );
-	glBindTexture(GL_TEXTURE_2D, EarthTextureName);
-	gluSphere(quadro, EARTH_RADIUS, 48, 48);
-	glPopMatrix();
-	glRotatef(EARTH_INCLINATION, 0.0, 0.0, 1.0);
-	glRotatef( 360.0 * (EarthDaysTranspired/EARTH_ORBIT_DUR), 0.0, 1.0, 0.0);
-	glTranslatef(EARTH_ORBIT_RADIUS, 0.0, 0.0 );
-	glRotatef( 360.0 * MoonRevolution, 0.0, 1.0, 0.0 );
-	glTranslatef( MOON_ORBIT_RADIUS  , 0.0, 0.0 );
-	glBindTexture(GL_TEXTURE_2D, MoonTextureName);
-	gluSphere(quadro, MOON_RADIUS, 48, 48);
+		glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
+		glPushMatrix();
+			glRotatef(EARTH_INCLINATION, 0.0, 0.0, 1.0);
+			glRotatef( 360.0 * (EarthDaysTranspired/EARTH_ORBIT_DUR), 0.0, 1.0, 0.0);
+			glTranslatef(EARTH_ORBIT_RADIUS, 0.0, 0.0 );
+			glRotatef( 360.0 * CurrentEarthRotation, 0.0, 1.0, 0.0 );
+			glRotatef( -90.0, 1.0, 0.0, 0.0 );
+			glBindTexture(GL_TEXTURE_2D, EarthTextureName);
+			gluSphere(quadro, EARTH_RADIUS, 48, 48);
+		glPopMatrix();
+		glRotatef(EARTH_INCLINATION, 0.0, 0.0, 1.0);
+		glRotatef( 360.0 * (EarthDaysTranspired/EARTH_ORBIT_DUR), 0.0, 1.0, 0.0);
+		glTranslatef(EARTH_ORBIT_RADIUS, 0.0, 0.0 );
+		glRotatef( 360.0 * MoonRevolution, 0.0, 1.0, 0.0 );
+		glTranslatef( MOON_ORBIT_RADIUS  , 0.0, 0.0 );
+		glBindTexture(GL_TEXTURE_2D, MoonTextureName);
+		gluSphere(quadro, MOON_RADIUS, 48, 48);
 	glPopMatrix();
 	glDisable(GL_TEXTURE_2D);
 	gluDeleteQuadric(quadro);
@@ -613,10 +729,13 @@ void drawParticle(Particle currParticle)
 void mouse(int button, int state, int x, int y) {
 	int width, height;
 	if ( state == GLUT_DOWN) {
-		
-		offsetX = EARTH_RADIUS * cos(earthAngle);
-		offsetY = EARTH_RADIUS * sin(earthAngle);
+		printf("%d %d \n", x, y);
 	}
 	printf("%f %f %f \n", offsetX, offsetY, offsetZ);
+}
+
+float toRadian( float angleInDegree)
+{
+	return angleInDegree * 3.14857 / 180;
 }
 
