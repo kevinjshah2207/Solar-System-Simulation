@@ -1,10 +1,3 @@
-//Adam Coffman
-//SolarSystem.cpp
-//3D Texture Mapped Model of the Solar System
-//Modeled to An Approximate Logarithmic Scale
-//Particle System For The Sun Implemented
-
-//If we're in the windows environment load the appropriate libraries
 #if defined(_WIN32)
 #include <GL/glut.h>
 #elif __APPLE__

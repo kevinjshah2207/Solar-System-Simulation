@@ -1,5 +1,3 @@
-//Adam Coffman 
-//Particle System Class
 ////////////////////////////////////////////////////////////////////////
 //This Class is used to represent the particle system. It contains 
 //an array of particle structs. Each with their own translation from the
