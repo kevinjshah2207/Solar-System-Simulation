@@ -78,6 +78,7 @@ GLfloat offsetZ = LOOK_AT_POSITION[2];
 /***********************/
 /* Function prototypes */
 /***********************/
+void setView();
 void KeyboardPress(unsigned char pressedKey, int mouseXPosition, int mouseYPosition);
 void NonASCIIKeyboardPress(int pressedKey, int mouseXPosition, int mouseYPosition);
 void TimerFunction(int value);
@@ -100,7 +101,6 @@ void drawGenericPlanet(GLfloat inclination, GLfloat orbitDuration,
 void drawParticle(Particle currParticle);
 void drawAllParticles();
 
-void clipWindow();
 void mouse(int button, int state, int x, int y);
 float toRadian( float angleInDegree);
 
@@ -124,7 +124,7 @@ int main(int argc, char** argv)
 	// glutDestroyWindow( winId)
 	// glutSelectWindow( winId)
 	// winId = glutGetWindow()
-	MainWindowNum = glutCreateWindow( "Solar System" );
+	MainWindowNum = glutCreateWindow( "Space Simulation" );
 
 	// Specify the resizing and refreshing routines.
 	glutReshapeFunc( ResizeWindow );
@@ -136,20 +136,9 @@ int main(int argc, char** argv)
 
 	// glGetIntegerv (GL_VIEWPORT, vpArray); for multiple viewport based on mouse cursor
 	glViewport(0, 0, currWindowSize[0], currWindowSize[1]);
-	gluOrtho2D( -1.0, 1.0, -1.0, 1.0);
+	//gluOrtho2D( -1.0, 1.0, -1.0, 1.0);
 
-	// Set up standard lighting, shading, and depth testing.
-	glShadeModel(GL_SMOOTH);
-	glEnable(GL_DEPTH_TEST);
-	glDepthFunc(GL_LEQUAL);								// The Type Of Depth Testing To Do
-	glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);	// Really Nice Perspective Calculations
-	glEnable(GL_NORMALIZE);
-	glCullFace(GL_BACK);	
-	glEnable(GL_CULL_FACE);
-	glClearColor(0.0, 0.0, 0.0, 0.0);
-	glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
-	SetLights();
-
+	setView();
 
 	// Set up all texture maps and texture-mapped objects.
 	MakeAllImages();
@@ -521,6 +510,13 @@ void MakeImage(const char bitmapFilename[], GLuint &textureName, bool hasAlpha)
 // Set the two lights to illuminate the scene. //
 void SetLights()
 {
+	/* void glLightfv(GLenum light,  GLenum pname,  const GLfloat * params); 
+	 *
+	 * pname - Specifies a light source parameter for light
+	 * params - Specifies a pointer to the value or values that parameter pname
+                    of light source light will be set to.
+     
+	 */
 	glLightfv(GL_LIGHT0, GL_AMBIENT,  LIGHT_AMBIENT);
 	glLightfv(GL_LIGHT0, GL_DIFFUSE,  LIGHT_DIFFUSE);
 	glLightfv(GL_LIGHT0, GL_SPECULAR, LIGHT_SPECULAR);
@@ -588,6 +584,7 @@ void ResizeWindow(GLsizei w, GLsizei h)
 void drawEarthAndMoon()
 {
 	GLfloat MoonRevolution = EarthDaysTranspired / LUNAR_CYCLE;
+	// a quadric or quadric surface, is a generalization of conic sections
 	GLUquadricObj* quadro = gluNewQuadric();							
 	gluQuadricNormals(quadro, GLU_SMOOTH);		
 	gluQuadricTexture(quadro, GL_TRUE);			
@@ -737,10 +734,16 @@ void drawParticle(Particle currParticle)
 
 void mouse(int button, int state, int x, int y) {
 	int width, height;
-	if ( state == GLUT_DOWN) {
-		printf("%d %d \n", x, y);
+	if ( state == GLUT_DOWN && button == GLUT_LEFT_BUTTON) {
+		EarthDayIncrement *= 2.0;
+		if (EarthDayIncrement > 10.0)
+			EarthDayIncrement = 10.0;
 	}
-	printf("%f %f %f \n", offsetX, offsetY, offsetZ);
+	if ( state == GLUT_DOWN && button == GLUT_RIGHT_BUTTON) {
+		EarthDayIncrement *= 0.5;
+		if (EarthDayIncrement < 0.01)
+			EarthDayIncrement = 0.01;
+	}
 }
 
 float toRadian( float angleInDegree)
@@ -748,3 +751,16 @@ float toRadian( float angleInDegree)
 	return angleInDegree * 3.14857 / 180;
 }
 
+// Set up standard lighting, shading, and depth testing.
+void setView() {
+	glShadeModel(GL_SMOOTH);
+	glEnable(GL_DEPTH_TEST);
+	glDepthFunc(GL_LEQUAL);								// The Type Of Depth Testing To Do
+	glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);	// Really Nice Perspective Calculations
+	glEnable(GL_NORMALIZE);
+	glCullFace(GL_BACK);	
+	glEnable(GL_CULL_FACE);
+	glClearColor(0.0, 0.0, 0.0, 0.0);
+	glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+	SetLights();
+}

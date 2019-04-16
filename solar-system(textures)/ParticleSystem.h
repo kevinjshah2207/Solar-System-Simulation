@@ -1,4 +1,3 @@
-////////////////////////////////////////////////////////////////////////
 //This Class is used to represent the particle system. It contains 
 //an array of particle structs. Each with their own translation from the
 //origin, azimuth, and zenith, as well as velocities and lifetimes.
@@ -6,7 +5,6 @@
 //always a constant number of particles (when one dies, it is immediately
 //replaced by another) and we do not need to perform sorted insertions
 //and deletions.
-/////////////////////////////////////////////////////////////////////////
 #include <cmath>
 #include <math.h>
 #include <cstdlib>
