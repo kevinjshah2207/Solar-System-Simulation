@@ -115,9 +115,15 @@ int main(int argc, char** argv)
 	glutInit (&argc, argv);
 
 	// Set up the display window.
+	
+	// Buffer types - enum
 	glutInitDisplayMode( GLUT_DOUBLE | GLUT_RGBA | GLUT_STENCIL | GLUT_DEPTH );
 	glutInitWindowPosition( INIT_WINDOW_POSITION[0], INIT_WINDOW_POSITION[1] );
 	glutInitWindowSize( currWindowSize[0], currWindowSize[1] );
+
+	// glutDestroyWindow( winId)
+	// glutSelectWindow( winId)
+	// winId = glutGetWindow()
 	MainWindowNum = glutCreateWindow( "Solar System" );
 
 	// Specify the resizing and refreshing routines.
@@ -127,6 +133,8 @@ int main(int argc, char** argv)
 	glutSpecialFunc( NonASCIIKeyboardPress );
 	glutDisplayFunc( Display );
 	glutTimerFunc( 20, TimerFunction, 1 );
+
+	// glGetIntegerv (GL_VIEWPORT, vpArray); for multiple viewport based on mouse cursor
 	glViewport(0, 0, currWindowSize[0], currWindowSize[1]);
 	gluOrtho2D( -1.0, 1.0, -1.0, 1.0);
 
@@ -427,6 +435,7 @@ void Display()
 	glLoadIdentity();
 
 	// Position and orient viewer.
+	// gluLookAt (x0, y0, z0, xref, yref, zref, Vx, Vy, Vz);
 	gluLookAt(offsetX + ViewerDistance * sin(viewerZenith) * sin(viewerAzimuth), 
 		  offsetY + ViewerDistance * cos(viewerZenith), 
 		  offsetZ + ViewerDistance * sin(viewerZenith) * cos(viewerAzimuth),
